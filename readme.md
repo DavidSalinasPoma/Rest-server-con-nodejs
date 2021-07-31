@@ -5,3 +5,7 @@
 <!-- Configura variables de entorno -->
 
 npm i express dotenv
+
+<!-- Middlewares -->
+
+npm i cors
