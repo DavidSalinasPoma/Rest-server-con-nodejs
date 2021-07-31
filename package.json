@@ -1,0 +1,19 @@
+{
+  "name": "08-restserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "rest-server.js",
+  "scripts": {
+    "dev": "nodemon src/rest-server.js",
+    "start": "node src/rest-server.js"
+  },
+  "keywords": [
+    "api restfull"
+  ],
+  "author": "David Salinas",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  }
+}
