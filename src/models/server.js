@@ -7,6 +7,10 @@ class Server {
     this.app = express();
     // Puerto del servidor
     this.port = process.env.PORT;
+
+    // Path de las rutas
+    this.usuariosPath = '/api/usuarios';
+
     // Middlewares
     this.middlewares();
     // Rutas de la app
@@ -21,38 +25,12 @@ class Server {
     // directorio publico
     this.app.use(express.static('src/public'));
   }
+
   // Metodo de rutas
   routes() {
-    this.app.get('/app', (req, res) => {
-      res.json({
-        message: 'get API',
-      });
-    });
-
-    this.app.put('/app', (req, res) => {
-      res.status(400).json({
-        message: 'get API',
-      });
-    });
-
-    this.app.post('/app', (req, res) => {
-      res.status(201).json({
-        message: 'get API',
-      });
-    });
-
-    this.app.delete('/app', (req, res) => {
-      res.json({
-        message: 'get API',
-      });
-    });
-
-    this.app.patch('/app', (req, res) => {
-      res.json({
-        message: 'get API',
-      });
-    });
+    this.app.use(this.usuariosPath, require('../routes/usuarios.routes'));
   }
+
   // Metodo que escucha el puerto
   listesPort() {
     this.app.listen(this.port, () => {
