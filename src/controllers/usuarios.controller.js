@@ -8,8 +8,16 @@ const usuariosGet = (req, res = response) => {
 };
 
 const usuariosPost = (req, res) => {
+  // Extraendo datos del body que manda el cliente
+  const body = req.body;
+
+  // Para trabajar con solo lo que se nesecita vamos a desestructarar el objeto
+  const { nombre } = req.body;
+
   res.status(201).json({
     message: 'post API-controlador',
+    body: body,
+    name: nombre,
   });
 };
 

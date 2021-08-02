@@ -22,6 +22,12 @@ class Server {
     // Cors.- Permite protejer el servidor de una manera superficial
     this.app.use(cors());
 
+    // Lectura y parseo del body
+    // Des esta manera cualquier informacion que venga ya sea de post, put o delete
+    // la va a intentar serializar a um formato json
+    // porque trabajar con json muy facil con javascript
+    this.app.use(express.json());
+
     // directorio publico
     this.app.use(express.static('src/public'));
   }
