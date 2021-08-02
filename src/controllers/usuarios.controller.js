@@ -1,9 +1,21 @@
 // Para el autoCompletado
-const { response } = require('express');
+const { request, response } = require('express');
 
-const usuariosGet = (req, res = response) => {
+const usuariosGet = (req = request, res = response) => {
+  // Obteniendo datos del QUERY PARAMS
+  const queryParams = req.query;
+
+  // Desetructuracion de objetos
+  const { q, nombre, id = 'No existe', page = 1, limit } = req.query;
+
   res.json({
     message: 'get API-controlador',
+    queryParams,
+    q,
+    nombre,
+    id,
+    page,
+    limit,
   });
 };
 
@@ -21,9 +33,17 @@ const usuariosPost = (req, res) => {
   });
 };
 
-const usuariosPut = (req, res) => {
+const usuariosPut = (req = request, res = response) => {
+  // Recibe datos de los parametros URL del cliente
+  const { id } = req.params;
+
+  // Extraendo datos del body que manda el cliente
+  const body = req.body;
+
   res.status(400).json({
     message: 'put API-controlldor',
+    id: id,
+    body,
   });
 };
 

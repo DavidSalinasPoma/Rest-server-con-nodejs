@@ -18,7 +18,7 @@ router.get('/', usuariosGet);
 
 router.post('/', usuariosPost);
 
-router.put('/', usuariosPut);
+router.put('/:id', usuariosPut); // recibe el id de la URL
 
 router.delete('/', usuariosDelete);
 
