@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const bdConnection = async () => {
   try {
     //   Conexión a la base de datos de mongoDB
-    console.log('Hola');
+    // console.log('Hola');
     await mongoose.connect(process.env.MONGODB_CNN, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
