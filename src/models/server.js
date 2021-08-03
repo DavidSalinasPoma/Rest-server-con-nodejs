@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 
+// Modulos propios
+const { bdConnection } = require('./../database/config.db');
+
 class Server {
   // Metodo constructor de la clase
   constructor() {
@@ -11,10 +14,19 @@ class Server {
     // Path de las rutas
     this.usuariosPath = '/api/usuarios';
 
+    // Conectar a la Base de datos mongoDB
+    this.conectarDB();
+
     // Middlewares
     this.middlewares();
+
     // Rutas de la app
     this.routes();
+  }
+
+  // Metooo que conecta la bd a mongoDB
+  async conectarDB() {
+    await bdConnection(); // Solo se hace referencia a la función
   }
 
   // Metodo middleware
