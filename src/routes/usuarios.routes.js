@@ -3,6 +3,9 @@ const { Router } = require('express');
 // Paquete para realizar validaciones de campos
 const { check } = require('express-validator');
 
+// middleware personalizado para hacer validaciones
+const { validarCampos } = require('../middleware/validar-campos.middleware');
+
 // Controladores
 const {
   usuariosPatch,
@@ -20,7 +23,16 @@ router.get('/', usuariosGet);
 
 router.post(
   '/',
-  [check('correo', 'El correo no es valido').isEmail()],
+  [
+    check('nombre', 'El nombre es obligatorio').not().isEmpty(), // si no esta vacio?
+    check(
+      'password',
+      'El password es obligatorio y debe ser de 6 letras o mas',
+    ).isLength({ min: 6 }), // si no esta vacio?
+    check('correo', 'El correo no es valido').isEmail(),
+    check('rol', 'No es un rol permitido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
+    validarCampos, // midlewares que activa el validar campos
+  ],
   usuariosPost,
 );
 

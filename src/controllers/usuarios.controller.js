@@ -1,10 +1,8 @@
 // Para encriptar la contarseña
 const bcryptjs = require('bcryptjs');
-// Para confirmar validaciones de campos que estan definidas en las rutas
-const { validationResult } = require('express-validator');
-
 // Para el autoCompletado
 const { request, response } = require('express');
+
 // Modelos
 const Usuario = require('../models/usuario.model');
 
@@ -27,13 +25,6 @@ const usuariosGet = (req = request, res = response) => {
 };
 
 const usuariosPost = async (req = request, res = response) => {
-  // Validacioón de campos
-  const errors = validationResult(req);
-  // preguntamos si  hay errores con el email ingresado por el cliente
-  if (!errors.isEmpty()) {
-    return res.status(400).json(errors);
-  }
-
   // Grabar solo lo que nosotros queremos con desestructuracion de objetos
   const { nombre, correo, password, rol } = req.body;
 
