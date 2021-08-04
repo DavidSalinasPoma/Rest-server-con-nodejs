@@ -1,3 +1,6 @@
+// Para encriptar la contarseña
+const bcryptjs = require('bcryptjs');
+
 // Para el autoCompletado
 const { request, response } = require('express');
 // Modelos
@@ -21,19 +24,25 @@ const usuariosGet = (req = request, res = response) => {
   });
 };
 
-const usuariosPost = async (req, res) => {
+const usuariosPost = async (req = request, res = response) => {
   // Extraendo datos del body que manda el cliente
   const body = req.body;
 
-  // Instancia de usuario
-  const usuario = new Usuario(body);
+  // Grabar solo lo que nosotros queremos con desestructuracion de objetos
+  const { nombre, correo, password, rol } = req.body;
 
-  // Grava el registro con mogoose en la base de datos
+  // Instancia de usuario
+  const usuario = new Usuario({ nombre, correo, password, rol });
+
+  // 1.- Verificar si el correo existe
+
+  // 2.- Encriptar la contraseña
+  const salt = bcryptjs.genSaltSync(10); // 10 es las vueltas de encriptacion
+  usuario.password = bcryptjs.hashSync(password, salt); // hash es para encriptar en una sola via.
+  // 3.- Guardar en la base de datos con registro con mogoose.
   await usuario.save();
 
-  // Para trabajar con solo lo que se nesecita vamos a desestructarar el objeto
-  const { nombre } = req.body;
-
+  // Respuesta al cliente desde el servidor
   res.status(201).json({
     message: 'post API-controlador',
     usuario,
