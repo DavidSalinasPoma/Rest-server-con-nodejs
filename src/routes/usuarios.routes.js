@@ -1,5 +1,7 @@
 // Paquete  interno de express
 const { Router } = require('express');
+// Paquete para realizar validaciones de campos
+const { check } = require('express-validator');
 
 // Controladores
 const {
@@ -16,7 +18,11 @@ const router = Router();
 // End Points
 router.get('/', usuariosGet);
 
-router.post('/', usuariosPost);
+router.post(
+  '/',
+  [check('correo', 'El correo no es valido').isEmail()],
+  usuariosPost,
+);
 
 router.put('/:id', usuariosPut); // recibe el id de la URL
 

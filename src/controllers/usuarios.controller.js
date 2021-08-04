@@ -1,5 +1,7 @@
 // Para encriptar la contarseña
 const bcryptjs = require('bcryptjs');
+// Para confirmar validaciones de campos que estan definidas en las rutas
+const { validationResult } = require('express-validator');
 
 // Para el autoCompletado
 const { request, response } = require('express');
@@ -25,8 +27,12 @@ const usuariosGet = (req = request, res = response) => {
 };
 
 const usuariosPost = async (req = request, res = response) => {
-  // Extraendo datos del body que manda el cliente
-  const body = req.body;
+  // Validacioón de campos
+  const errors = validationResult(req);
+  // preguntamos si  hay errores con el email ingresado por el cliente
+  if (!errors.isEmpty()) {
+    return res.status(400).json(errors);
+  }
 
   // Grabar solo lo que nosotros queremos con desestructuracion de objetos
   const { nombre, correo, password, rol } = req.body;
@@ -35,6 +41,13 @@ const usuariosPost = async (req = request, res = response) => {
   const usuario = new Usuario({ nombre, correo, password, rol });
 
   // 1.- Verificar si el correo existe
+  const existeEmail = await Usuario.findOne({ correo }); // Busca en mongoDB si existe el correo
+  if (existeEmail) {
+    // devolvemos una respuesta al cliente
+    return res.status(400).json({
+      message: 'Este correo ya esta en usó.',
+    });
+  }
 
   // 2.- Encriptar la contraseña
   const salt = bcryptjs.genSaltSync(10); // 10 es las vueltas de encriptacion
