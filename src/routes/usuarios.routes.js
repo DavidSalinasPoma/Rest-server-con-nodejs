@@ -16,7 +16,11 @@ const {
 } = require('../controllers/usuarios.controller');
 
 // Validador para saber si hay un rol en la bd
-const { esRolValido, existeEmail } = require('../helpers/db-validators');
+const {
+  esRolValido,
+  existeEmail,
+  existeUsuarioPorId,
+} = require('../helpers/db-validators');
 
 // Utilizamos el Router
 const router = Router();
@@ -37,12 +41,22 @@ router.post(
     check('correo').custom(existeEmail),
     // check('rol', 'No es un rol permitido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
     check('rol').custom(esRolValido),
-    validarCampos, // midlewares que activa el validar campos
+    validarCampos, // midlewares que activa la validacion de los middlewares en la ruta
   ],
   usuariosPost,
 );
 
-router.put('/:id', usuariosPut); // recibe el id de la URL
+router.put(
+  '/:id',
+  [
+    check('id', 'No es un ID valido').isMongoId(),
+    check('id').custom(existeUsuarioPorId),
+    // check('rol', 'No es un rol permitido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
+    check('rol').custom(esRolValido),
+    validarCampos, // midlewares que activa el validar campos
+  ],
+  usuariosPut,
+); // recibe el id de la URL
 
 router.delete('/', usuariosDelete);
 

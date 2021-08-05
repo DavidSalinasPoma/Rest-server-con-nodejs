@@ -1,5 +1,9 @@
 // Para encriptar la contarseña
 const bcryptjs = require('bcryptjs');
+// Modelo
+
+const Usuario = require('../models/usuario.model');
+
 // Para el autoCompletado
 const { request, response } = require('express');
 
@@ -21,6 +25,7 @@ const usuariosGet = (req = request, res = response) => {
   });
 };
 
+// Controlador para crear Usuario con POST
 const usuariosPost = async (req = request, res = response) => {
   // Grabar solo lo que nosotros queremos con desestructuracion de objetos
   const { nombre, correo, password, rol } = req.body;
@@ -31,6 +36,7 @@ const usuariosPost = async (req = request, res = response) => {
   // 2.- Encriptar la contraseña
   const salt = bcryptjs.genSaltSync(10); // 10 es las vueltas de encriptacion
   usuario.password = bcryptjs.hashSync(password, salt); // hash es para encriptar en una sola via.
+
   // 3.- Guardar en la base de datos con registro con mogoose.
   await usuario.save();
 
@@ -41,17 +47,30 @@ const usuariosPost = async (req = request, res = response) => {
   });
 };
 
-const usuariosPut = (req = request, res = response) => {
+// Controllador para actualizar usuario con PUT
+const usuariosPut = async (req = request, res = response) => {
   // Recibe datos de los parametros URL del cliente
   const { id } = req.params;
 
-  // Extraendo datos del body que manda el cliente
-  const body = req.body;
+  // Desestructurar la informacion que viene desde el cliente
+  // Extraer todo lo que no se necesita que se grabe en la BD
+  const { _id, password, google, correo, ...restoUsuario } = req.body;
+
+  // Todo: Validar contra la base de datos
+  // si el,pass existe sisgnifica que quiere actualizar su contraseña
+  if (password) {
+    // Encriptar la contraseña y la reestablese en restoUsuario
+    const salt = bcryptjs.genSaltSync(10); // 10 es las vueltas de encriptacion
+    restoUsuario.password = bcryptjs.hashSync(password, salt); // hash es para encriptar en una sola via.
+  }
+
+  // Actualizando en la DB por el id y el restoUsuario
+  const usuario = await Usuario.findByIdAndUpdate(id, restoUsuario);
 
   res.status(400).json({
     message: 'put API-controlldor',
     id: id,
-    body,
+    usuario, // Retorna el usuario actualizado
   });
 };
 
