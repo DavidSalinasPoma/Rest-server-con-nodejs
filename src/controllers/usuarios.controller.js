@@ -3,9 +3,6 @@ const bcryptjs = require('bcryptjs');
 // Para el autoCompletado
 const { request, response } = require('express');
 
-// Modelos
-const Usuario = require('../models/usuario.model');
-
 const usuariosGet = (req = request, res = response) => {
   // Obteniendo datos del QUERY PARAMS
   const queryParams = req.query;
@@ -30,15 +27,6 @@ const usuariosPost = async (req = request, res = response) => {
 
   // Instancia de usuario
   const usuario = new Usuario({ nombre, correo, password, rol });
-
-  // 1.- Verificar si el correo existe
-  const existeEmail = await Usuario.findOne({ correo }); // Busca en mongoDB si existe el correo
-  if (existeEmail) {
-    // devolvemos una respuesta al cliente
-    return res.status(400).json({
-      message: 'Este correo ya esta en usó.',
-    });
-  }
 
   // 2.- Encriptar la contraseña
   const salt = bcryptjs.genSaltSync(10); // 10 es las vueltas de encriptacion

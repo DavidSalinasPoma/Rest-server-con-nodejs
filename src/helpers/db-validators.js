@@ -1,7 +1,9 @@
 // Aqui todos los validadores de la aplicación
 
-// Importamos el modelo ROL
+// Modelos
+// Es los modelos se puede utilizar cualquier nombre
 const rolModel = require('../models/rol.model');
+const usuarioModel = require('../models/usuario.model');
 
 // Validar si el rol existe en la BD
 const esRolValido = async (rol = '') => {
@@ -12,6 +14,16 @@ const esRolValido = async (rol = '') => {
   }
 };
 
+// Validar si el correo existe
+const existeEmail = async (correo = '') => {
+  const email = await usuarioModel.findOne({ correo }); // Busca en mongoDB si existe el correo
+  if (email) {
+    // devolvemos una respuesta al cliente
+    throw new Error(`Este correo ${correo} ya esta registrado`);
+  }
+};
+
 module.exports = {
   esRolValido,
+  existeEmail,
 };

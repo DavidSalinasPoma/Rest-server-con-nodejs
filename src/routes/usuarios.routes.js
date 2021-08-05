@@ -16,7 +16,7 @@ const {
 } = require('../controllers/usuarios.controller');
 
 // Validador para saber si hay un rol en la bd
-const { esRolValido } = require('../helpers/db-validators');
+const { esRolValido, existeEmail } = require('../helpers/db-validators');
 
 // Utilizamos el Router
 const router = Router();
@@ -33,6 +33,8 @@ router.post(
       'El password es obligatorio y debe ser de 6 letras o mas',
     ).isLength({ min: 6 }), // si no esta vacio?
     check('correo', 'El correo no es valido').isEmail(),
+    // Validando Email duplicados
+    check('correo').custom(existeEmail),
     // check('rol', 'No es un rol permitido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
     check('rol').custom(esRolValido),
     validarCampos, // midlewares que activa el validar campos
