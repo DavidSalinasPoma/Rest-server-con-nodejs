@@ -14,6 +14,7 @@ const {
   usuariosDelete,
   usuariosPut,
 } = require('../controllers/usuarios.controller');
+const rolModel = require('../models/rol.model');
 
 // Utilizamos el Router
 const router = Router();
@@ -30,7 +31,14 @@ router.post(
       'El password es obligatorio y debe ser de 6 letras o mas',
     ).isLength({ min: 6 }), // si no esta vacio?
     check('correo', 'El correo no es valido').isEmail(),
-    check('rol', 'No es un rol permitido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
+    // check('rol', 'No es un rol permitido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
+    check('rol').custom(async (rol = '') => {
+      // validmos que exista el rol en la BD
+      const existeRol = await rolModel.findOne({ rol });
+      if (!existeRol) {
+        throw new Error(`El rol ${rol} no esta registrado en la bd`);
+      }
+    }),
     validarCampos, // midlewares que activa el validar campos
   ],
   usuariosPost,
