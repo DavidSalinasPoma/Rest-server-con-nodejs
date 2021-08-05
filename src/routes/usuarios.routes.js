@@ -14,7 +14,9 @@ const {
   usuariosDelete,
   usuariosPut,
 } = require('../controllers/usuarios.controller');
-const rolModel = require('../models/rol.model');
+
+// Validador para saber si hay un rol en la bd
+const { esRolValido } = require('../helpers/db-validators');
 
 // Utilizamos el Router
 const router = Router();
@@ -32,13 +34,7 @@ router.post(
     ).isLength({ min: 6 }), // si no esta vacio?
     check('correo', 'El correo no es valido').isEmail(),
     // check('rol', 'No es un rol permitido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
-    check('rol').custom(async (rol = '') => {
-      // validmos que exista el rol en la BD
-      const existeRol = await rolModel.findOne({ rol });
-      if (!existeRol) {
-        throw new Error(`El rol ${rol} no esta registrado en la bd`);
-      }
-    }),
+    check('rol').custom(esRolValido),
     validarCampos, // midlewares que activa el validar campos
   ],
   usuariosPost,

@@ -32,5 +32,15 @@ const usuarioSchema = Schema({
   },
 });
 
+// Quitar el password y la version para que no muestre al cliente
+// Funcion normal para utilizar el THIS
+usuarioSchema.methods.toJSON = function () {
+  // 1.-__V estamos.- quitando la version
+  // 2.- password.- estamos quitando la contraseña
+  // 3.- ...usuario.- estamos unificando el nuevo objeto sin la version y el password
+  const { __v, password, ...usuario } = this.toObject();
+  return usuario;
+};
+
 // Exportamos el nombre de la tabla con el esquema construido
 module.exports = model('Usuarios', usuarioSchema);
