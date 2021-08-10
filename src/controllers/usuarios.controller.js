@@ -15,17 +15,31 @@ const usuariosGet = async (req = request, res = response) => {
   // Obteneiendo el query Params del cliente y si no viene el limite sera de 5
   const { limite = 5, desde = 0 } = req.query;
 
+  // Filtrando solo los que estan en estado = true
+  const query = { estado: true };
+
   // Obteniendo datos del usuario de la BD, Utilizando paginación
-  const usuarios = await Usuario.find()
-    .skip(Number(desde))
-    .limit(Number(limite));
+  // const usuario = await Usuario.find(query)
+  //   .skip(Number(desde))
+  //   .limit(Number(limite));
+
+  // Contador de registros en la BD
+  // const total = await Usuario.countDocuments(query);
+
+  // Ejecutar instrucciones de forma simultanea De forma eficiente
+  // Desestructuración de Arreglos
+  const [total, usuario] = await Promise.all([
+    Usuario.countDocuments(query),
+    Usuario.find(query).skip(Number(desde)).limit(Number(limite)),
+  ]);
 
   // Desetructuracion de objetos
   // const { q, nombre, id = 'No existe', page = 1, limit = 0 } = req.query;
 
   res.json({
     message: 'get API-controlador',
-    usuarios,
+    total,
+    usuario,
   });
 };
 
