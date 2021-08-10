@@ -7,21 +7,25 @@ const Usuario = require('../models/usuario.model');
 // Para el autoCompletado
 const { request, response } = require('express');
 
-const usuariosGet = (req = request, res = response) => {
+// Controlador para obtener datos GET
+const usuariosGet = async (req = request, res = response) => {
   // Obteniendo datos del QUERY PARAMS
-  const queryParams = req.query;
+  // const queryParams = req.query;
+
+  // Obteneiendo el query Params del cliente y si no viene el limite sera de 5
+  const { limite = 5, desde = 0 } = req.query;
+
+  // Obteniendo datos del usuario de la BD, Utilizando paginación
+  const usuarios = await Usuario.find()
+    .skip(Number(desde))
+    .limit(Number(limite));
 
   // Desetructuracion de objetos
-  const { q, nombre, id = 'No existe', page = 1, limit } = req.query;
+  // const { q, nombre, id = 'No existe', page = 1, limit = 0 } = req.query;
 
   res.json({
     message: 'get API-controlador',
-    queryParams,
-    q,
-    nombre,
-    id,
-    page,
-    limit,
+    usuarios,
   });
 };
 
