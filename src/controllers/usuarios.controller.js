@@ -92,9 +92,21 @@ const usuariosPut = async (req = request, res = response) => {
   });
 };
 
-const usuariosDelete = (req, res) => {
+// Controlador para eliminar o dar de baja a Usuario con DELETE
+const usuariosDelete = async (req, res) => {
+  // Recibe datos de los parametros URL del cliente
+  const { id } = req.params;
+
+  // Borrar fisicamente de mongoDB
+  // const usuario = await Usuario.findByIdAndDelete(id);
+
+  // Dando de baja al usuario Cambiando su estado a false
+  const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
+
   res.json({
     message: 'delete API-controllador',
+    id,
+    usuario,
   });
 };
 

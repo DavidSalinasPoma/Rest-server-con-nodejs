@@ -58,7 +58,16 @@ router.put(
   usuariosPut,
 ); // recibe el id de la URL
 
-router.delete('/', usuariosDelete);
+router.delete(
+  '/:id',
+  [
+    // Validaciones
+    check('id', 'No es un ID valido').isMongoId(), // Que el id sea valido
+    check('id').custom(existeUsuarioPorId), // Que el id exista en la BD
+    validarCampos, // midlewares que activa el validar campos, por que esta utilizando el check
+  ],
+  usuariosDelete,
+);
 
 router.patch('/', usuariosPatch);
 
