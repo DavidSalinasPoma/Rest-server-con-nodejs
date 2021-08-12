@@ -13,6 +13,7 @@ class Server {
 
     // Path de las rutas
     this.usuariosPath = '/api/usuarios';
+    this.authPath = '/api/auth'; // Path para el login con jwt
 
     // Conectar a la Base de datos mongoDB
     this.conectarDB();
@@ -46,6 +47,9 @@ class Server {
 
   // Metodo de rutas
   routes() {
+    // Ruta para login
+    this.app.use(this.authPath, require('../routes/auth.routes'));
+    // Ruta para Usuarios
     this.app.use(this.usuariosPath, require('../routes/usuarios.routes'));
   }
 

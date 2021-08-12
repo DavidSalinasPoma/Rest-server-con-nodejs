@@ -38,7 +38,8 @@ usuarioSchema.methods.toJSON = function () {
   // 1.-__V estamos.- quitando la version
   // 2.- password.- estamos quitando la contraseña
   // 3.- ...usuario.- estamos unificando el nuevo objeto sin la version y el password
-  const { __v, password, ...usuario } = this.toObject();
+  const { __v, password, _id, ...usuario } = this.toObject();
+  usuario.uid = _id; // Transformar el _id por uid
   return usuario;
 };
 

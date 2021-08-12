@@ -4,7 +4,19 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 // middleware personalizado para hacer validaciones
-const { validarCampos } = require('../middleware/validar-campos.middleware');
+// const { validarCampos } = require('../middleware/validar-campos.middleware');
+// const { validarJWT } = require('../middleware/validar-jwt.middleware');
+// const {
+//   esAdminRol,
+//   tieneRoles,
+// } = require('../middleware/validar-roles.middleware');
+
+const {
+  validarCampos,
+  validarJWT,
+  esAdminRol,
+  tieneRoles,
+} = require('../middleware'); //Directo de la carpeta por que tiene index.js
 
 // Controladores
 const {
@@ -62,6 +74,9 @@ router.delete(
   '/:id',
   [
     // Validaciones
+    validarJWT, // protege la ruta con JWT
+    // esAdminRol, // Elimina si existe el rol ADMIN_ROLE
+    tieneRoles('ADMIN_ROLE', 'VENTAS_ROLE0', 'DSP_ROLE'),
     check('id', 'No es un ID valido').isMongoId(), // Que el id sea valido
     check('id').custom(existeUsuarioPorId), // Que el id exista en la BD
     validarCampos, // midlewares que activa el validar campos, por que esta utilizando el check

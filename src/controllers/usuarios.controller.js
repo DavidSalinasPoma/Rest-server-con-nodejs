@@ -101,12 +101,17 @@ const usuariosDelete = async (req, res) => {
   // const usuario = await Usuario.findByIdAndDelete(id);
 
   // Dando de baja al usuario Cambiando su estado a false
-  const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
+  const usuario = await Usuario.findByIdAndUpdate(id, {
+    estado: false,
+  });
+
+  const usuarioAutenticado = req.usuario;
 
   res.json({
     message: 'delete API-controllador',
     id,
     usuario,
+    usuarioAutenticado,
   });
 };
 
