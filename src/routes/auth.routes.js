@@ -4,7 +4,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 // Controlador
-const { login } = require('../controllers/auth.controller');
+const { login, googleSingIn } = require('../controllers/auth.controller');
 
 // Activa los middlewares o check
 const { validarCampos } = require('../middleware/validar-campos.middleware');
@@ -14,7 +14,7 @@ const { validarCampos } = require('../middleware/validar-campos.middleware');
 // Utilizamos el Router
 const router = Router();
 
-// End Points Ruta login
+// End Points Ruta login normal
 router.post(
   '/login',
   [
@@ -23,6 +23,17 @@ router.post(
     validarCampos,
   ],
   login,
+);
+
+// End Points Ruta google
+router.post(
+  '/google',
+  [
+    // Tiene que venir desde el frond el token con el nombre id_token
+    check('id_token', 'El id token es necesario').not().isEmpty(),
+    validarCampos,
+  ],
+  googleSingIn,
 );
 
 module.exports = router;

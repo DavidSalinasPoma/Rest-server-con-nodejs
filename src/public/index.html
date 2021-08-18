@@ -1,12 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Denegado</title>
+    <title>Autenticación con google</title>
+
+    <!-- Autenticación de google -->
+    <meta name="google-signin-client_id"
+        content="424767396576-tnk2udfgr6skcqqrcpgi9sq1pvlt6lqo.apps.googleusercontent.com">
 </head>
+
 <body>
-    <h1>Acceso denegado</h1>
+    <h1>Google Sing in</h1>
+    <hr>
+    <!-- Boton de autenticación con google -->
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+    <!-- Boton cerrar sesion de google -->
+    <a href="#" onclick="signOut();">Sign out</a>
+
+    <!-- Autenticación de google -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <!-- Funcion de loggeo -->
+    <script>
+        // Configurar prod y desarrollo
+        // console.log(window.location.hostname.includes('localhost')); // significa que esta en desarrollo
+
+
+        // Ternario if else
+        let url = (window.location.hostname.includes('localhost')) ?
+            'http://localhost:3000/api/auth/google' :
+            'https://cafe-server-nodejs.herokuapp.com/api/auth/google'
+
+        // Función pàra loguease con google
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+            // Muestra el token de usuario de google
+            let id_token = googleUser.getAuthResponse().id_token;
+            console.log(id_token);
+            // Objeto para enviar al back end
+            const datos = {
+                id_token
+            };
+            // console.log(data);
+            // Petición POST en el FrontEnd
+            fetch(url, {
+                    method: 'POST',
+                    // Este header recibe datos del BACKEND en formato JSON
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    // Esto es lo que enviamos al backEND en formato jason
+                    body: JSON.stringify(datos)
+                })
+                .then(resp => resp.json()) // Estamos serializando la respuesta a json
+                .then(data => console.log('Nuestro server ', data)) // la data es la info que llega del backEnd
+                .catch(console.log()) // en caso de un error
+        }
+
+        // Funcion para cerrar sesion en google
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+    </script>
 </body>
+
 </html>

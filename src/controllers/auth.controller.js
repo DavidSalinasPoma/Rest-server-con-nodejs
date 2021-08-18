@@ -6,6 +6,7 @@ const { response, request } = require('express');
 
 // Modulo generar token
 const { generarJWT } = require('../helpers/generar-jwt');
+const { googleVerify } = require('../helpers/google-verify');
 
 // Modelo
 const Usuario = require('../models/usuario.model'); // El nombre del modelo puede ser cuaquier nombre
@@ -54,6 +55,56 @@ const login = async (req = request, res = response) => {
   }
 };
 
+// Controlador googleSingIn
+const googleSingIn = async (req = request, res = response) => {
+  // Obteniendo el token desde el cliente
+  const { id_token } = req.body;
+
+  try {
+    // obteniendo datos del usuario google
+    const { correo, nombre, img } = await googleVerify(id_token);
+
+    // Verificar si el correo(usuario) ya existe en la base de datos
+    let usuario = await Usuario.findOne({ correo });
+
+    // Preguntamos Si el usuario no existe
+    if (!usuario) {
+      // Tengo que crearlo
+      const data = {
+        nombre,
+        correo,
+        password: ':p',
+        img,
+        google: true,
+      };
+      usuario = new Usuario(data);
+      usuario.save();
+    }
+
+    // Si el usuario es falso
+    if (!usuario.estado) {
+      return res.status(401).json({
+        message: 'Hable con el administrador, usuario Bloqueado',
+      });
+    }
+
+    // Generar el JWT para el usuario de google
+    const token = await generarJWT(usuario.id);
+
+    res.status(200).json({
+      message: 'Todo ok! google signIn',
+      usuario,
+      token,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: 'Token de Google no es valido!',
+    });
+  }
+};
+
 module.exports = {
   login,
+  googleSingIn,
 };
