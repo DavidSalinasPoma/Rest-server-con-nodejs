@@ -26,3 +26,5 @@ Configuración de variables de entorno
 Borrado de archivos
 Eliminado físico de la base de datos
 Eliminación por estado en un campo de la colección
+
+# CRUD categorias, productos
