@@ -9,7 +9,7 @@ const { Usuario, Categoria, Producto } = require('../models');
 // Colecciones permitidas para las busquedas
 const coleccionesPermitidas = ['usuarios', 'categorias', 'productos', 'roles'];
 
-// Tecnica para buscar Usuarios
+// Tecnica para buscar Usuarios---
 const buscarUsuarios = async (termino = '', res = response) => {
   // Verificamos si es un ID mongosse valido
   const esMongoID = ObjectId.isValid(termino); // Si es valido retorna true

@@ -1,7 +1,7 @@
 // Para sugerencias de autocompletado
 const { request, response } = require('express');
 // modelos
-const { Categoria, Producto } = require('../models');
+const { Producto } = require('../models');
 
 // CONTROLLADOR PARA OBTENER LAS PRODUCTOS - paginado - total - populate
 const obtenerProductos = async (req = request, res = response) => {

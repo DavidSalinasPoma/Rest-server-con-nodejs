@@ -10,7 +10,7 @@ const {
   obtenerProducto,
   actualizarProducto,
   borrarProducto,
-} = require('../controllers/Productos.controller');
+} = require('../controllers/productos.controller');
 
 // Validador de ID de Categoria y Validar que exista ID de productos
 const {
