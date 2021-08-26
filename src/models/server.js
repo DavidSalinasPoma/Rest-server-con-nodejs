@@ -11,12 +11,20 @@ class Server {
     // Puerto del servidor
     this.port = process.env.PORT;
 
-    // Path de las rutas
-    this.usuariosPath = '/api/usuarios';
-    this.authPath = '/api/auth'; // Path para el login con jwt
+    // Path para las rutas
+    this.path = {
+      auth: '/api/auth', // Path para el login con jwt
+      buscar: '/api/buscar', // Path para hacer las busquedas
+      categorias: '/api/categorias', // Path para las categorias
+      productos: '/api/productos', // Path para los productos
+      usuarios: '/api/usuarios', // Path para los usuarios
+    };
 
-    // Conectar a la Base de datos mongoDB
-    this.conectarDB();
+    // Path de las rutas
+
+    this.authPath =
+      // Conectar a la Base de datos mongoDB
+      this.conectarDB();
 
     // Middlewares
     this.middlewares();
@@ -48,9 +56,15 @@ class Server {
   // Metodo de rutas
   routes() {
     // Ruta para login
-    this.app.use(this.authPath, require('../routes/auth.routes'));
+    this.app.use(this.path.auth, require('../routes/auth.routes'));
     // Ruta para Usuarios
-    this.app.use(this.usuariosPath, require('../routes/usuarios.routes'));
+    this.app.use(this.path.usuarios, require('../routes/usuarios.routes'));
+    // Ruta para las categorias
+    this.app.use(this.path.categorias, require('../routes/categorias.routes'));
+    // Ruta para los productos
+    this.app.use(this.path.productos, require('../routes/productos.routes'));
+    // Ruta para  buscar
+    this.app.use(this.path.buscar, require('../routes/buscar.routes'));
   }
 
   // Metodo que escucha el puerto

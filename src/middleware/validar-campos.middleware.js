@@ -9,7 +9,7 @@ const validarCampos = (req, res, next) => {
     return res.status(400).json(errors);
   }
   // se llama a next() si este middleware pasa y sigue con el siguiente middleware
-  // Y si ya no existe otro middleware(ose  validaciones en las rutas) se pasa al controlador
+  // Y si ya no existe otro middleware(osea  validaciones en las rutas) se pasa al controlador
   next();
 };
 

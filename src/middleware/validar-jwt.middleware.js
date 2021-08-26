@@ -1,9 +1,8 @@
 // Paquete JWT
 const jwt = require('jsonwebtoken');
-
 // Modelos
 const Usuario = require('../models/usuario.model');
-
+// Para el autocompletado
 const { response, request } = require('express');
 
 // next() continua con el siguiente middleware o controlador

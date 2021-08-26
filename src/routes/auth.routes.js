@@ -3,18 +3,17 @@ const { Router } = require('express');
 // Paquete para realizar validaciones de campos
 const { check } = require('express-validator');
 
-// Controlador
-const { login, googleSingIn } = require('../controllers/auth.controller');
-
 // Activa los middlewares o check
 const { validarCampos } = require('../middleware/validar-campos.middleware');
 
 // Controlador
+const { login, googleSingIn } = require('../controllers/auth.controller');
 
 // Utilizamos el Router
 const router = Router();
 
 // End Points Ruta login normal
+//{{url}}/api/auth/login
 router.post(
   '/login',
   [

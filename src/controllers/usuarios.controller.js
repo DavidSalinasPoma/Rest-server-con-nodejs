@@ -29,8 +29,11 @@ const usuariosGet = async (req = request, res = response) => {
   // Ejecutar instrucciones de forma simultanea De forma eficiente
   // Desestructuración de Arreglos
   const [total, usuario] = await Promise.all([
-    Usuario.countDocuments(query),
-    Usuario.find(query).skip(Number(desde)).limit(Number(limite)),
+    Usuario.countDocuments(query), // total
+    Usuario.find(query)
+      .populate('usuario', 'nombre') //Muestra datos de la relación com respecto del usuario
+      .skip(Number(desde))
+      .limit(Number(limite)), // paginado
   ]);
 
   // Desetructuracion de objetos

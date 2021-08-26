@@ -2,6 +2,7 @@
 
 // Modelos
 // Es los modelos se puede utilizar cualquier nombre
+const { Categoria, Producto } = require('../models');
 const Rol = require('../models/rol.model');
 const Usuario = require('../models/usuario.model');
 
@@ -32,8 +33,32 @@ const existeUsuarioPorId = async (id) => {
   }
 };
 
+/**
+ * Validar categoria por id
+ */
+const existeCategoriaPorId = async (id) => {
+  const existeCategoria = await Categoria.findById(id); // Busca en mongoDB si existe el ID
+  if (!existeCategoria) {
+    // devolvemos una respuesta al cliente
+    throw new Error(`El Id no existe ${id}`);
+  }
+};
+
+/**
+ *  Validar producto por ID
+ */
+const existeProductoPorId = async (id) => {
+  const existeProducto = await Producto.findById(id); // Busca en mongoDB si existe el ID
+  if (!existeProducto) {
+    // devolvemos una respuesta al cliente
+    throw new Error(`El Id no existe ${id}`);
+  }
+};
+
 module.exports = {
   esRolValido,
   existeEmail,
   existeUsuarioPorId,
+  existeCategoriaPorId,
+  existeProductoPorId,
 };
