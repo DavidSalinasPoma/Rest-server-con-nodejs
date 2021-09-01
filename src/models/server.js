@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 // Modulos propios
 const { bdConnection } = require('./../database/config.db');
@@ -18,6 +19,7 @@ class Server {
       categorias: '/api/categorias', // Path para las categorias
       productos: '/api/productos', // Path para los productos
       usuarios: '/api/usuarios', // Path para los usuarios
+      uploads: '/api/uploads', // Path para cargar archivos
     };
 
     // Path de las rutas
@@ -51,6 +53,15 @@ class Server {
 
     // directorio publico
     this.app.use(express.static('src/public'));
+
+    // Fileupload-Carga de archivos
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: '/tmp/',
+        createParentPath: true,
+      }),
+    );
   }
 
   // Metodo de rutas
@@ -65,6 +76,8 @@ class Server {
     this.app.use(this.path.productos, require('../routes/productos.routes'));
     // Ruta para  buscar
     this.app.use(this.path.buscar, require('../routes/buscar.routes'));
+    // Ruta para cargar Archivos
+    this.app.use(this.path.uploads, require('../routes/uploads.routes'));
   }
 
   // Metodo que escucha el puerto
